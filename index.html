@@ -75,7 +75,55 @@ hr {
 }
         </style>
         <script src="js/scripts.js" defer>
-            
+            let btnAdd=document.getElementById("btn-add");
+let validBtn=document.getElementById("valid-btn");
+let container=document.getElementById("container");
+let i=0;
+let tasks=[];
+btnAdd.onclick=function addNewLine(){
+    i++;
+    let listContainer=`<div id="list-container${i}" class="list-container">
+                        <input type="checkbox" id="check${i}" class="check" />
+                        <input type="text" placeholder="Tâche..." id="text${i}" class="text" />
+                   </div>`;
+    container.innerHTML+=listContainer;
+    let text = document.querySelector(`#list-container${i} #text${i}`);
+    btnAdd.disabled=true;
+    validBtn.disabled=true;
+    text.oninput=()=>{
+        text.value==""?btnAdd.disabled=true:btnAdd.disabled=false;
+        text.value==""?validBtn.disabled=true:validBtn.disabled=false;
+    }
+}
+
+let j=0;
+validBtn.onclick=()=>{
+    j++;
+    let text = document.querySelectorAll(`.list-container .text`);
+    let valTask=document.querySelector(`#list-container${i} #text${i}`);
+    text.forEach(inputText => {
+        if (inputText.value.trim() !== "") {
+            let tasksSavers=localStorage.setItem(`task${j}`,inputText.value.trim());
+            let tasksSave=localStorage.getItem(`task${j}`);
+            tasks.push({
+                task: tasksSave,
+                completed: false,
+            });
+            valTask.remove();
+            let listContainer=document.querySelector(`#container #list-container${j}`);
+            listContainer.innerHTML+=`<input type="text" value="${tasksSave}" class="texte" />`;
+        }
+    });
+    console.log(tasks,j);
+}
+for (let k = 1; k < localStorage.length; k++) {
+    const count = console.log(localStorage.length);
+    let listContainer=`<div class="list-container">
+                        <input type="checkbox" id="check${k}" class="check" />
+                        <input type="text" placeholder="Tâche..." value="${localStorage.getItem('task'+k)}" class="text" />
+                    </div>`;
+    container.innerHTML+=listContainer;
+}
         </script>
     </head>
     <body>
